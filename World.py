@@ -47,6 +47,24 @@ class World:
 
         return Pos(x,y)
 
+    def get_adjacent_chunks(self):
+        chunk_pos = self.get_current_chunk()
+
+        return [
+            chunk_pos.get_tuple(),
+
+            (chunk_pos.x+1,chunk_pos.y),
+            (chunk_pos.x-1, chunk_pos.y),
+            (chunk_pos.x, chunk_pos.y+1),
+            (chunk_pos.x, chunk_pos.y-1),
+
+            (chunk_pos.x+1, chunk_pos.y+1),
+            (chunk_pos.x+1, chunk_pos.y-1),
+            (chunk_pos.x-1, chunk_pos.y+1),
+            (chunk_pos.x-1, chunk_pos.y-1),
+
+        ]
+
 
     def generate_chunk(self,top_left_rel:Pos) -> bool:
 
@@ -84,7 +102,14 @@ class World:
         self.last_chunk = new_chunk
 
     def render(self,screen:pg.surface.Surface):
-        0
+        adjacent_chunks = self.get_adjacent_chunks()
+        c = 0
+        for i in self.chunks:
+            if i in adjacent_chunks:
+                self.chunks[i].render(screen, self.camera_rel)
+                c+=1
+
+        print("rendered chunks : ",c)
 
 
     def render_debug(self,screen:pg.surface.Surface):
@@ -94,7 +119,7 @@ class World:
 
         for i in self.chunks:
             self.chunks[i].render_debug(screen,self.camera_rel)
-            self.chunks[i].render(screen,self.camera_rel)
+
 
         for i in range(0,
                        self.screen_width // self.grid_step_x):
