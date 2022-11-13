@@ -32,16 +32,16 @@ class Game:
     def check_events(self):
         step = 10
         if K_RIGHT in self.held_keys:
-            self.world.camera_rel.x+=step
-
-        elif K_LEFT in self.held_keys:
             self.world.camera_rel.x-=step
 
+        elif K_LEFT in self.held_keys:
+            self.world.camera_rel.x+=step
+
         if K_UP in self.held_keys:
-            self.world.camera_rel.y-=step
+            self.world.camera_rel.y+=step
 
         elif K_DOWN in self.held_keys:
-            self.world.camera_rel.y+=step
+            self.world.camera_rel.y-=step
 
 
     def update_and_render(self):
