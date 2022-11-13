@@ -28,18 +28,16 @@ class World:
         Chunk.step_x = step_x
         Chunk.step_y = step_y
 
-        self.chunks = {
-            (0,0) :
-            Chunk(self.top_left,self.chunk_width,self.chunk_height,
-                             self.island_width,self.island_height)
-        }
+        self.chunks = {}
+
+        self.generate_chunk_group(self.top_left)
 
         self.last_chunk = Pos(0,0)
 
     def get_current_chunk(self):
         x,y = self.camera_rel.get_list()
-        x = -x
-        y = -y
+        x = -x + self.screen_width//2
+        y = -y + self.screen_height//2
 
         x //= self.grid_step_x
         y //= self.grid_step_y
@@ -50,23 +48,46 @@ class World:
         return Pos(x,y)
 
 
+    def generate_chunk(self,top_left_rel:Pos) -> bool:
+
+        if top_left_rel.get_tuple() in self.chunks:
+            return False
+
+        self.chunks[top_left_rel.get_tuple()] = Chunk(
+            top_left_rel.get_transformed_pos(self.chunk_width)
+            , self.chunk_width, self.chunk_height,
+            self.island_width, self.island_height)
+
+        return True
+
+    def generate_chunk_group(self,top_left_rel:Pos):
+        self.generate_chunk(top_left_rel)
+
+        self.generate_chunk(top_left_rel.get_transformed_pos(1, 1, 0))
+        self.generate_chunk(top_left_rel.get_transformed_pos(1, -1, 0))
+        self.generate_chunk(top_left_rel.get_transformed_pos(1, 0, 1))
+        self.generate_chunk(top_left_rel.get_transformed_pos(1, 0, -1))
+
+        self.generate_chunk(top_left_rel.get_transformed_pos(1, 1, -1))
+        self.generate_chunk(top_left_rel.get_transformed_pos(1, 1, +1))
+        self.generate_chunk(top_left_rel.get_transformed_pos(1, -1, -1))
+        self.generate_chunk(top_left_rel.get_transformed_pos(1, -1, +1))
+
+    def check_events(self):
+        new_chunk = self.get_current_chunk()
+
+        if self.last_chunk.get_tuple() != new_chunk.get_tuple():
+            self.generate_chunk_group(new_chunk)
+            print(len(self.chunks))
+
+
+        self.last_chunk = new_chunk
+
     def render(self,screen:pg.surface.Surface):
         0
 
 
     def render_debug(self,screen:pg.surface.Surface):
-
-
-        new_chunk = self.get_current_chunk()
-
-        if self.last_chunk.get_tuple()!=new_chunk.get_tuple():
-            print(len(self.chunks))
-            self.chunks[new_chunk.get_tuple()] = Chunk(
-                                new_chunk.get_transformed_pos(self.chunk_width)
-                                            ,self.chunk_width,self.chunk_height,
-                                        self.island_width,self.island_height)
-
-        self.last_chunk = new_chunk
 
         x_offset = self.camera_rel.x % self.grid_step_x
         y_offset = self.camera_rel.y % self.grid_step_y

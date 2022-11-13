@@ -30,6 +30,9 @@ class Game:
                     self.held_keys.remove(i.key)
 
     def check_events(self):
+
+        self.world.check_events()
+
         step = 10
         if K_RIGHT in self.held_keys:
             self.world.camera_rel.x-=step
