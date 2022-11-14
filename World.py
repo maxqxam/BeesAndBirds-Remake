@@ -19,10 +19,10 @@ class World:
         self.image = Image(self.grid_step_x)
 
         self.top_left = Pos(0,0)
-        self.chunk_width = 15
-        self.chunk_height = 15
-        self.island_width = 10
-        self.island_height = 10
+        self.chunk_width = 12
+        self.chunk_height = 12
+        self.island_width = 9
+        self.island_height = 9
 
         Chunk.image = self.image
         Chunk.step_x = step_x
@@ -96,20 +96,21 @@ class World:
 
         if self.last_chunk.get_tuple() != new_chunk.get_tuple():
             self.generate_chunk_group(new_chunk)
-            print(len(self.chunks))
+
 
 
         self.last_chunk = new_chunk
 
     def render(self,screen:pg.surface.Surface):
         adjacent_chunks = self.get_adjacent_chunks()
+
         c = 0
         for i in self.chunks:
             if i in adjacent_chunks:
                 self.chunks[i].render(screen, self.camera_rel)
                 c+=1
 
-        print("rendered chunks : ",c)
+        print("rendered chunks : ",c,"total chunks : ",len(self.chunks))
 
 
     def render_debug(self,screen:pg.surface.Surface):
@@ -117,8 +118,10 @@ class World:
         x_offset = self.camera_rel.x % self.grid_step_x
         y_offset = self.camera_rel.y % self.grid_step_y
 
+        adjacent_chunks = self.get_adjacent_chunks()
         for i in self.chunks:
-            self.chunks[i].render_debug(screen,self.camera_rel)
+            if i in adjacent_chunks:
+                self.chunks[i].render_debug(screen,self.camera_rel)
 
 
         for i in range(0,

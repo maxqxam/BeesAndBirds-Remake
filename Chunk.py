@@ -3,7 +3,7 @@ from pygame.locals import *
 import random
 from Image import Image
 from Pos import Pos
-
+from functions import get_egg
 class Chunk:
     image:Image
     step_x:int
@@ -19,26 +19,31 @@ class Chunk:
         self.top_left = top_left
         self.chunk_width = chunk_width
         self.chunk_height = chunk_height
-        self.island_width = island_width
-        self.island_height = island_height
+        self.island_width = random.randint(island_width//3,island_width)
+        self.island_height = random.randint(island_height//3,island_height)
         self.offset_x = (self.chunk_width - self.island_width) // 2
         self.offset_y = (self.chunk_height - self.island_height) // 2
         self.body:list = []
 
-        self.surface = pg.surface.Surface([island_width*Chunk.step_x,
-                                           island_height*Chunk.step_y])
+        self.surface = pg.surface.Surface([self.island_width*Chunk.step_x,
+                                           self.island_height*Chunk.step_y])
 
-        for i in range(island_width):
-            for c in range(island_height):
-                self.body.append(
-                    (Pos(i + top_left.x + self.offset_x
-                        ,c + top_left.y + self.offset_y),
-                        random.choice(Chunk.image.dirt_list))
-                                 )
+        self.make_dirt_chunk(top_left,island_width,island_height)
 
         self.update_surface()
 
         self.debug_color = [130,130,170]
+
+
+    def make_dirt_chunk(self,top_left:Pos,island_width:int,island_height:int):
+
+        for i in range(island_width):
+            for c in range(island_height):
+
+                sprite = random.choice(Chunk.image.top_dirt_list)
+                self.body.append((top_left.get_transformed_pos(1,i,c),sprite))
+
+
 
     def update_surface(self):
         for i in self.body:
