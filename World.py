@@ -19,10 +19,10 @@ class World:
         self.image = Image(self.grid_step_x)
 
         self.top_left = Pos(0,0)
-        self.chunk_width = 12
-        self.chunk_height = 12
-        self.island_width = 9
-        self.island_height = 9
+        self.chunk_width = 15
+        self.chunk_height = 15
+        self.island_width = 10
+        self.island_height = 10
 
         Chunk.image = self.image
         Chunk.step_x = step_x
@@ -122,7 +122,6 @@ class World:
         for i in self.chunks:
             if i in adjacent_chunks:
                 self.chunks[i].render_debug(screen,self.camera_rel)
-
 
         for i in range(0,
                        self.screen_width // self.grid_step_x):
