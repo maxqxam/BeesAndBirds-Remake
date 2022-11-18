@@ -39,7 +39,8 @@ class World:
         Bee.step_x = step_x
         Bee.step_y = step_y
 
-        self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2),step_x,step_x//5)
+        self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2),
+                          Pos(0,0),1,step_x//5)
 
     def get_current_chunk(self):
         x,y = self.camera_rel.get_list()

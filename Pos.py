@@ -3,6 +3,8 @@ class Pos:
         self.x = x
         self.y = y
 
+    def __str__(self):
+        return "Pos< X:{0} , Y:{1}>".format(self.x,self.y)
     def get_list(self):
         return [self.x,self.y]
 
@@ -15,3 +17,7 @@ class Pos:
     def get_transformed_pos(self,mult:float=1,sum_x:float=0,sum_y:float=0):
         x,y = self.get_transformed_list(mult, sum_x, sum_y)
         return Pos(x,y)
+
+    def combine(self,pos):
+        self.x += pos.x
+        self.y += pos.y

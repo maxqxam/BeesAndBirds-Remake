@@ -2,6 +2,7 @@ import pygame as pg
 from pygame.locals import *
 
 from World import World
+from Pos import Pos
 
 class Game:
     def __init__(self,screen:pg.surface.Surface):
@@ -33,18 +34,27 @@ class Game:
 
         self.world.check_events()
 
-        step = 15
+        step = 10
+        move_rel:Pos = Pos(0,0)
+
         if K_RIGHT in self.held_keys:
             self.world.camera_rel.x-=step
+            move_rel.x = step
 
         elif K_LEFT in self.held_keys:
             self.world.camera_rel.x+=step
+            move_rel.x = -step
 
         if K_UP in self.held_keys:
             self.world.camera_rel.y+=step
+            move_rel.y = -step
 
         elif K_DOWN in self.held_keys:
             self.world.camera_rel.y-=step
+            move_rel.y = step
+
+        if move_rel.x!=0 or move_rel.y!=0:
+            self.world.player.move(move_rel)
 
 
     def update_and_render(self):
