@@ -11,6 +11,12 @@ class Pos:
     def get_tuple(self):
         return self.x,self.y
 
+    def transform(self,mult:float=1,sum_x:float=0,sum_y:float=0):
+        self.x*=mult
+        self.y*=mult
+        self.x+=sum_x
+        self.y+=sum_y
+
     def get_transformed_list(self,mult:float=1,sum_x:float=0,sum_y:float=0):
         return [self.x*mult + sum_x,self.y*mult + sum_y]
 
@@ -21,3 +27,4 @@ class Pos:
     def combine(self,pos):
         self.x += pos.x
         self.y += pos.y
+

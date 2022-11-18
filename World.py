@@ -25,6 +25,14 @@ class World:
         self.island_width = 9
         self.island_height = 9
 
+        screen_width_grid = screen_width//step_x
+        screen_height_grid = screen_height//step_y
+
+        self.camera_rel.x = abs(screen_width_grid-self.chunk_width)//2
+        self.camera_rel.y = abs(screen_height_grid-self.chunk_height)//2
+        self.camera_rel.transform(step_x)
+
+
         Chunk.image = self.image
         Chunk.step_x = step_x
         Chunk.step_y = step_y
