@@ -35,7 +35,11 @@ class World:
 
         self.last_chunk = Pos(0,0)
 
-        self.player = Bee()
+        Bee.image = self.image
+        Bee.step_x = step_x
+        Bee.step_y = step_y
+
+        self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2),step_x,step_x//5)
 
     def get_current_chunk(self):
         x,y = self.camera_rel.get_list()
@@ -105,6 +109,9 @@ class World:
         self.last_chunk = new_chunk
 
     def render(self,screen:pg.surface.Surface):
+
+
+
         adjacent_chunks = self.get_adjacent_chunks()
 
         c = 0
@@ -112,6 +119,8 @@ class World:
             if i in adjacent_chunks:
                 self.chunks[i].render(screen, self.camera_rel)
                 c+=1
+
+        self.player.render(screen,self.camera_rel)
 
         print("rendered chunks : ",c,"total chunks : ",len(self.chunks))
 
