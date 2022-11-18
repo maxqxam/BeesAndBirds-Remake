@@ -5,7 +5,7 @@ from Sprite import Sprite
 
 class Image:
 
-    def __init__(self,step_x:int):
+    def __init__(self,step_x:int,step_y:int):
 
         Sprite.auto_scaleX = True
         Sprite.scaleX = step_x + 1
@@ -34,9 +34,6 @@ class Image:
         self.dirtStone0 = Sprite('./images/dirtStone0.png')
         self.dirtStone1 = Sprite('./images/dirtStone1.png')
 
-        self.flower0 = Sprite('./images/flower0.png')
-        self.flower1 = Sprite('./images/flower1.png')
-
         self.fire0 = Sprite('./images/fire0.png')
         self.fire1 = Sprite('./images/fire1.png')
         self.fire2 = Sprite('./images/fire2.png')
@@ -44,6 +41,14 @@ class Image:
         self.fire4 = Sprite('./images/fire4.png')
         self.fire5 = Sprite('./images/fire5.png')
 
+        self.bee0 = Sprite('./images/bee0.png')
+        self.bee1 = Sprite('./images/bee1.png')
+        self.bee2 = Sprite('./images/bee2.png')
+        self.bee3 = Sprite('./images/bee3.png')
+
+
+        self.bee_list = [self.bee0,self.bee1]
+        self.bee_fire_list = [self.bee2,self.bee3]
 
         self.dirt_list = [self.dirt0,self.dirt1]
         self.top_dirt_list = [self.top_dirt0,self.top_dirt1]
@@ -56,6 +61,15 @@ class Image:
         self.dirtStone_list=[self.dirtStone0,self.dirtStone1]
         self.water_list = [self.water0,self.water1,self.water2,
                            self.water3,self.water4,self.water5]
+
+        Sprite.auto_scaleX = False
+        Sprite.auto_scaleY = True
+        Sprite.scaleY = step_y
+
+        self.flower0 = Sprite('./images/flower0.png')
+        self.flower1 = Sprite('./images/flower1.png')
+
+
         self.flower_list = [self.flower0,self.flower1]
 
         self.fire_list = [self.fire0,self.fire1,self.fire2,

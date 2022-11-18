@@ -33,7 +33,7 @@ class Game:
 
         self.world.check_events()
 
-        step = 10
+        step = 15
         if K_RIGHT in self.held_keys:
             self.world.camera_rel.x-=step
 

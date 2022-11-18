@@ -29,9 +29,11 @@ class Chunk:
         self.surface = pg.surface.Surface([self.island_width*Chunk.step_x,
                                            self.island_height*Chunk.step_y])
 
-        self.surface.fill([255,255,255])
+        # self.surface.set_colorkey([0,0,0])
 
-        self.make_dirt_chunk(top_left,self.island_width,self.island_height)
+        func = random.choice([self.make_stone_pool,self.make_dirt_chunk])
+
+        func(top_left,self.island_width,self.island_height)
 
         self.update_surface()
 
@@ -39,18 +41,52 @@ class Chunk:
         self.debug_color_border = [80,80,100]
 
 
-    def make_dirt_chunk(self,top_left:Pos,island_width:int,island_height:int):
+    def make_stone_pool(self,top_left:Pos,island_width:int,island_height:int):
 
         for i in range(island_width):
-            for c in range(island_height):
-                if i==0 or c==0 or c==island_height-1 or i==island_width-1:
-                    sprite = random.choice(Chunk.image.dirt_list)
-                else:
-                    sprite = random.choice(Chunk.image.water_list)
+            for c in range(1,island_height):
+                sprite = random.choice(Chunk.image.water_list)
+
+                if i==0 or i==island_width-1 or c==island_height-1:
+                    sprite = random.choice(Chunk.image.stone_list)
+                    if c==1:
+                        sprite = random.choice(Chunk.image.top_stone_list)
 
                 self.body.append((top_left.get_transformed_pos(1,i,c),sprite))
 
+        for i in [0,island_width-1]:
+            egg = get_egg(4,1)
+            if egg:
+                sprite = Chunk.image.fire0
+                self.body.append((top_left.get_transformed_pos(1,i,0),sprite))
 
+
+
+
+    def make_dirt_chunk(self,top_left:Pos,island_width:int,island_height:int):
+
+        for i in range(island_width):
+            for c in range(1,island_height):
+                sprite = random.choice(Chunk.image.dirt_list)
+                if c==1:
+                    sprite = random.choice(Chunk.image.top_dirt_list)
+                    egg = 1
+                else:
+                    egg = get_egg(c,island_height-c)
+
+                if egg == 0 or c == island_height-1:
+                    sprite = random.choice(Chunk.image.bottom_dirt_list)
+
+
+                self.body.append((top_left.get_transformed_pos(1,i,c),sprite))
+                if egg == 0: break
+
+        for i in range(island_width):
+            egg = get_egg(island_width-i,i)
+            if egg:
+                sprite = random.choice(Chunk.image.flower_list)
+
+                self.body.append((top_left.get_transformed_pos(1, i, 0), sprite))
 
     def update_surface(self):
         for i in self.body:

@@ -4,6 +4,7 @@ from pygame.locals import *
 from Image import Image
 from Chunk import Chunk
 from Pos import Pos
+from Bee import Bee
 
 class World:
     def __init__(self,
@@ -16,13 +17,13 @@ class World:
         self.grid_step_y = step_y
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.image = Image(self.grid_step_x)
+        self.image = Image(self.grid_step_x , self.grid_step_y)
 
         self.top_left = Pos(0,0)
-        self.chunk_width = 15
-        self.chunk_height = 15
-        self.island_width = 10
-        self.island_height = 10
+        self.chunk_width = 12
+        self.chunk_height = 12
+        self.island_width = 9
+        self.island_height = 9
 
         Chunk.image = self.image
         Chunk.step_x = step_x
@@ -33,6 +34,8 @@ class World:
         self.generate_chunk_group(self.top_left)
 
         self.last_chunk = Pos(0,0)
+
+        self.player = Bee()
 
     def get_current_chunk(self):
         x,y = self.camera_rel.get_list()
