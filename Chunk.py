@@ -1,6 +1,9 @@
 import pygame as pg
 from pygame.locals import *
 import random
+from time import time
+from MSprite import MSprite
+from Sprite import Sprite
 from Image import Image
 from Pos import Pos
 from functions import get_egg
@@ -35,6 +38,10 @@ class Chunk:
 
         func(top_left,self.island_width,self.island_height)
 
+        self.last_epoch:float = time()
+        self.tick_speed:float = 0.05
+
+
         self.update_surface()
 
         self.debug_color = [130,130,170]
@@ -45,7 +52,7 @@ class Chunk:
 
         for i in range(island_width):
             for c in range(1,island_height):
-                sprite = random.choice(Chunk.image.water_list)
+                sprite = Chunk.image.water_msprite
 
                 if i==0 or i==island_width-1 or c==island_height-1:
                     sprite = random.choice(Chunk.image.stone_list)
@@ -88,12 +95,34 @@ class Chunk:
 
                 self.body.append((top_left.get_transformed_pos(1, i, 0), sprite))
 
+
+    def check_events(self):
+
+        for i in self.body:
+            if type(i[1])==MSprite:
+                i[1].check_events()
+
+        T2 = time()
+        if self.last_epoch + self.tick_speed < T2:
+            self.last_epoch = T2
+            self.update()
+
+
+
+
+    def update(self):
+        self.update_surface()
+
+
     def update_surface(self):
         for i in self.body:
-            self.surface.blit(i[1].transformed,
-                              i[0].get_transformed_list(Chunk.step_x,
-                              - (self.top_left.x + 0) * Chunk.step_x,
-                              - (self.top_left.y + 0) * Chunk.step_y))
+
+            i[1].render(self.surface,
+                        i[0].get_transformed_pos(Chunk.step_x,
+                                                 - (self.top_left.x + 0) * Chunk.step_x,
+                                                 - (self.top_left.y + 0) * Chunk.step_y)
+                        )
+
 
     def render_debug(self,screen:pg.surface.Surface,camera_rel:Pos):
         pg.draw.rect(screen,self.debug_color,

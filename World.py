@@ -49,6 +49,8 @@ class World:
 
         self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2),
                           Pos(0,0),1,step_x//5)
+        self.camera_rel.x -= self.player.width // 2
+        self.camera_rel.y -= self.player.width // 2
 
     def get_current_chunk(self):
         x,y = self.camera_rel.get_list()
@@ -113,13 +115,16 @@ class World:
         if self.last_chunk.get_tuple() != new_chunk.get_tuple():
             self.generate_chunk_group(new_chunk)
 
+        adjacent_chunks = self.get_adjacent_chunks()
+
+        for i in self.chunks:
+            if i in adjacent_chunks:
+                self.chunks[i].check_events()
 
 
         self.last_chunk = new_chunk
 
     def render(self,screen:pg.surface.Surface):
-
-
 
         adjacent_chunks = self.get_adjacent_chunks()
 
