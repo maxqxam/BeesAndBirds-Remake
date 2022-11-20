@@ -124,6 +124,11 @@ class World:
 
         self.last_chunk = new_chunk
 
+        self.player.check_events()
+
+
+
+
     def render(self,screen:pg.surface.Surface):
 
         adjacent_chunks = self.get_adjacent_chunks()

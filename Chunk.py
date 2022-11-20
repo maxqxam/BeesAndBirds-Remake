@@ -52,7 +52,7 @@ class Chunk:
 
         for i in range(island_width):
             for c in range(1,island_height):
-                sprite = MSprite(Chunk.image.water_list)
+                sprite = MSprite(Chunk.image.water_list,True)
 
                 if i==0 or i==island_width-1 or c==island_height-1:
                     sprite = random.choice(Chunk.image.stone_list)
@@ -64,7 +64,7 @@ class Chunk:
         for i in [0,island_width-1]:
             egg = get_egg(4,1)
             if egg:
-                sprite = Chunk.image.fire0
+                sprite = MSprite(Chunk.image.fire_list)
                 self.body.append((top_left.get_transformed_pos(1,i,0),sprite))
 
 

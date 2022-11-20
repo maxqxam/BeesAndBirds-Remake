@@ -8,12 +8,12 @@ from Pos import Pos
 from time import time
 
 class MSprite:
-    def __init__(self,sprite_list:list):
+    def __init__(self,sprite_list:list,should_shuffle:bool=False):
         self.last_epoch:float = time()
-        self.tick_speed:float = random.choice([0.5,1,2])
+        self.tick_speed:float = random.choice([0.5])
         self.x_flipped:bool = False
         self.y_flipped:bool = False
-        self.should_shuffle = True
+        self.should_shuffle = should_shuffle
         self.image_index:int = 0
         self.sprite_list:list = sprite_list
 

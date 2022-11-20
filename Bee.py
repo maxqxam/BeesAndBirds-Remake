@@ -1,6 +1,8 @@
 import pygame as pg
 from pygame.locals import *
 
+from Sprite import Sprite
+from MSprite import MSprite
 from Image import Image
 from Pos import Pos
 
@@ -19,12 +21,19 @@ class Bee:
         self.speed = speed
         self.is_on_fire = False
         self.is_flipped = False
-        self.image_index = 0
+        self.is_moving = False
+        self.msprite = MSprite(Bee.image.bee_list)
+        self.fire_msprite = MSprite(Bee.image.bee_fire_list)
+
 
 
     def move(self,rel:Pos):
         self.top_left_pos_rel.combine(rel)
         print(self.top_left_pos,self.top_left_pos_rel)
+
+        if rel.x > 0: self.is_flipped = False
+        if rel.x < 0: self.is_flipped = True
+
         if self.top_left_pos_rel.x >= Bee.step_x:
             self.top_left_pos.x += 1
             self.top_left_pos_rel.x -= Bee.step_x
@@ -41,16 +50,27 @@ class Bee:
             self.top_left_pos_rel.y = Bee.step_x - abs(self.top_left_pos_rel.y)
             self.top_left_pos.y -= 1
 
-
-
-
-
     def check_events(self):
-        0
+        if self.is_flipped ^ self.msprite.x_flipped:
+            self.msprite.x_flipped = self.is_flipped
+            self.fire_msprite.x_flipped = self.is_flipped
+            self.msprite.do_flips()
+            self.fire_msprite.do_flips()
+
+        sprite = self.msprite
+        if self.is_on_fire: sprite = self.fire_msprite
+
+        sprite.check_events()
+
 
     def render(self,screen:pg.surface.Surface,camera:Pos):
-        screen.blit(Bee.image.bee_list[self.image_index].transformed,
-                    self.top_left_pos.get_transformed_list(Bee.step_x
-                                                           ,self.top_left_pos_rel.x+camera.x,
-                                                           self.top_left_pos_rel.y+camera.y))
+
+        sprite = self.msprite
+        if self.is_on_fire: sprite = self.fire_msprite
+
+        sprite.render(screen,
+                    self.top_left_pos.get_transformed_pos(Bee.step_x
+                         , self.top_left_pos_rel.x + camera.x,
+                          self.top_left_pos_rel.y + camera.y))
+
 
