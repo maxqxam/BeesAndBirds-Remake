@@ -52,7 +52,7 @@ class Chunk:
 
         for i in range(island_width):
             for c in range(1,island_height):
-                sprite = Chunk.image.water_msprite
+                sprite = MSprite(Chunk.image.water_list)
 
                 if i==0 or i==island_width-1 or c==island_height-1:
                     sprite = random.choice(Chunk.image.stone_list)

@@ -10,9 +10,10 @@ from time import time
 class MSprite:
     def __init__(self,sprite_list:list):
         self.last_epoch:float = time()
-        self.tick_speed:float = random.randint(20,40)/100
+        self.tick_speed:float = random.choice([0.5,1,2])
         self.x_flipped:bool = False
         self.y_flipped:bool = False
+        self.should_shuffle = True
         self.image_index:int = 0
         self.sprite_list:list = sprite_list
 
@@ -24,6 +25,10 @@ class MSprite:
             i.do_flips()
 
     def tick(self):
+        if self.should_shuffle:
+            self.image_index = random.randint(0,len(self.sprite_list)-1)
+            return
+
         self.image_index += 1
         if self.image_index>=len(self.sprite_list):
             self.image_index = 0

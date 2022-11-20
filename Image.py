@@ -63,7 +63,7 @@ class Image:
         self.water_list = [self.water0,self.water1,self.water2,
                            self.water3,self.water4,self.water5]
 
-        self.water_msprite = MSprite(self.water_list)
+
 
         Sprite.auto_scaleX = False
         Sprite.auto_scaleY = True
@@ -77,8 +77,6 @@ class Image:
 
         self.fire_list = [self.fire0,self.fire1,self.fire2,
                           self.fire3,self.fire4,self.fire5]
-
-        self.fire_msprite = MSprite(self.fire_list)
 
 
 
