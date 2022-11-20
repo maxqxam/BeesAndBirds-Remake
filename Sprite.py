@@ -6,8 +6,8 @@ class Sprite:
 
     auto_scaleX = False
     auto_scaleY = False
-    scaleX = 50
-    scaleY = 50
+    scaleX = 0
+    scaleY = 0
 
     def __init__(self,path:str,scaleX:float=-1,scaleY:float=-1):
         self.raw = pg.image.load(path)
@@ -33,9 +33,9 @@ class Sprite:
             self.newScaleByHeight(self.scaleY)
 
     def do_flips(self):
-        if Sprite.auto_scaleX:
+        if self.should_scaleX:
             self.newScaleByWidth(self.scaleX)
-        elif Sprite.auto_scaleY:
+        elif self.should_scaleY:
             self.newScaleByHeight(self.scaleY)
 
         self.transformed = pg.transform.flip(self.transformed,self.x_flipped,self.y_flipped)

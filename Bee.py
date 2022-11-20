@@ -60,7 +60,7 @@ class Bee:
         sprite = self.msprite
         if self.is_on_fire: sprite = self.fire_msprite
 
-        sprite.check_events()
+        if self.is_moving: sprite.check_events()
 
 
     def render(self,screen:pg.surface.Surface,camera:Pos):

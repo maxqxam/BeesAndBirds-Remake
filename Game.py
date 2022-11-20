@@ -54,7 +54,10 @@ class Game:
             move_rel.y = step
 
         if move_rel.x!=0 or move_rel.y!=0:
+            self.world.player.is_moving = True
             self.world.player.move(move_rel)
+        else:
+            self.world.player.is_moving = False
 
 
     def update_and_render(self):
