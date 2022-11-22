@@ -19,6 +19,7 @@ class Chunk:
                  island_width:int
                  ,island_height:int):
 
+
         self.top_left = top_left
         self.chunk_width = chunk_width
         self.chunk_height = chunk_height
@@ -30,16 +31,18 @@ class Chunk:
         self.body:list = []
 
         self.surface = pg.surface.Surface([self.island_width*Chunk.step_x,
-                                           self.island_height*Chunk.step_y])
+                                           self.island_height*Chunk.step_y],
+                                          pg.SRCALPHA).convert_alpha()
+        self.surface.fill([0,0,0,0])
 
-        # self.surface.set_colorkey([0,0,0])
+
 
         func = random.choice([self.make_stone_pool,self.make_dirt_chunk])
 
         func(top_left,self.island_width,self.island_height)
 
         self.last_epoch:float = time()
-        self.tick_speed:float = 0.05
+        self.tick_speed:float = 0.18
 
 
         self.update_surface()
@@ -52,7 +55,9 @@ class Chunk:
 
         for i in range(island_width):
             for c in range(1,island_height):
-                sprite = MSprite(Chunk.image.water_list,True)
+                sprite = MSprite(Chunk.image.water_list,
+                                 True,
+                                 [5,4])
 
                 if i==0 or i==island_width-1 or c==island_height-1:
                     sprite = random.choice(Chunk.image.stone_list)
@@ -64,7 +69,7 @@ class Chunk:
         for i in [0,island_width-1]:
             egg = get_egg(4,1)
             if egg:
-                sprite = MSprite(Chunk.image.fire_list)
+                sprite = MSprite(Chunk.image.fire_list,tick_speed_list=[0.2])
                 self.body.append((top_left.get_transformed_pos(1,i,0),sprite))
 
 
@@ -115,6 +120,9 @@ class Chunk:
 
 
     def update_surface(self):
+
+        self.surface.fill([0,0,0,0])
+
         for i in self.body:
 
             i[1].render(self.surface,
@@ -167,6 +175,7 @@ class Chunk:
 
 
     def render(self,screen:pg.surface.Surface,camera_rel:Pos):
+
 
         screen.blit(self.surface,
                     self.top_left.get_transformed_list(Chunk.step_x,

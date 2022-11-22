@@ -48,6 +48,7 @@ class Image:
         self.bee3 = Sprite('./images/bee3.png')
 
 
+
         self.bee_list = [self.bee0,self.bee1]
         self.bee_fire_list = [self.bee2,self.bee3]
 

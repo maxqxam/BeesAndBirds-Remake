@@ -22,8 +22,8 @@ class Bee:
         self.is_on_fire = False
         self.is_flipped = False
         self.is_moving = False
-        self.msprite = MSprite(Bee.image.bee_list)
-        self.fire_msprite = MSprite(Bee.image.bee_fire_list)
+        self.msprite = MSprite(Bee.image.bee_list,tick_speed_list=[0.15])
+        self.fire_msprite = MSprite(Bee.image.bee_fire_list,tick_speed_list=[0.15])
 
 
 
