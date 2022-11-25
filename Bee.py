@@ -7,6 +7,7 @@ from MSprite import MSprite
 from Image import Image
 from Pos import Pos
 from Rect import Rect
+import random
 
 class Bee:
     image: Image
@@ -15,12 +16,14 @@ class Bee:
     on_sim_chunks: list
 
     def __init__(self,top_left_pos:Pos,top_left_pos_rel:Pos,
-                 width_scale:float,speed:float):
+                 size_scale:float,speed:float):
 
         self.top_left_pos = top_left_pos
         self.top_left_pos_rel = top_left_pos_rel
-        self.width_scale = width_scale
-        self.width = Bee.step_x * self.width_scale
+        self.size_scale = size_scale
+        self.width = 0
+        self.height = 0
+        self.update_sprite()
         self.speed = speed
         self.is_on_fire = False
         self.is_flipped = False
@@ -30,6 +33,23 @@ class Bee:
         self.fire_msprite = MSprite(Bee.image.bee_fire_list,tick_speed_list=[0.15])
         self.is_ghost = True
         self.move_request_list:list[Pos] = []
+
+
+    def update_size_scale(self,new_size_scale:float):
+        self.size_scale = new_size_scale
+        self.update_sprite()
+
+    def transform_size_scale(self,mult:float=1,plus:float=0):
+        self.size_scale *= mult
+        self.size_scale += plus
+        self.update_sprite()
+
+    def update_sprite(self):
+
+        for i in Bee.image.bee_list + Bee.image.bee_fire_list:
+            i.newScaleByWidth(Bee.step_x * self.size_scale)
+            i.do_flips()
+            self.width,self.height = i.width,i.height
 
 
 
@@ -109,6 +129,6 @@ class Bee:
     def get_rect(self) -> Rect:
         return self.top_left_pos.get_transformed_pos(Bee.step_x
                                               , self.top_left_pos_rel.x ,
-                                              self.top_left_pos_rel.y).get_rect(Bee.step_x,
-                                                                                Bee.step_y)
+                                              self.top_left_pos_rel.y).get_rect(self.width,
+                                                                                self.height)
 

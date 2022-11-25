@@ -8,8 +8,8 @@ class Image:
 
     def __init__(self,step_x:int,step_y:int):
 
-        Sprite.auto_scaleX = True
-        Sprite.scaleX = step_x + 1
+        Sprite.auto_width = True
+        Sprite.width = step_x + 1
 
         self.dirt0 = Sprite('./images/dirt0.png')
         self.dirt1 = Sprite('./images/dirt1.png')
@@ -66,9 +66,9 @@ class Image:
 
 
 
-        Sprite.auto_scaleX = False
-        Sprite.auto_scaleY = True
-        Sprite.scaleY = step_y
+        Sprite.auto_width = False
+        Sprite.auto_height = True
+        Sprite.height = step_y
 
         self.flower0 = Sprite('./images/flower0.png')
         self.flower1 = Sprite('./images/flower1.png')

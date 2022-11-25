@@ -34,11 +34,17 @@ class Game:
 
     def check_events(self):
 
-
         step = 10
         move_rel:Pos = Pos(0,0)
 
         self.world.player.is_ghost = K_LSHIFT in self.held_keys
+
+        if K_1 in self.held_keys and self.world.player.size_scale > 0.1:
+            self.world.player.transform_size_scale(plus=-0.01)
+
+        if K_2 in self.held_keys and self.world.player.size_scale < 5:
+            self.world.player.transform_size_scale(plus=0.01)
+
 
         if K_RIGHT in self.held_keys:move_rel.x = step
         elif K_LEFT in self.held_keys:move_rel.x = -step

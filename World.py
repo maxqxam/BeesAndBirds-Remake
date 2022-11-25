@@ -50,6 +50,7 @@ class World:
 
         self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2),
                           Pos(0,0),1,step_x//5)
+
         self.camera_rel.x -= self.player.width // 2
         self.camera_rel.y -= self.player.width // 2
 
