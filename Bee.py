@@ -44,9 +44,9 @@ class Bee:
 
             rects = i.get_blocking_objects()
             for i in rects:
-                print(self.get_rect(),i)
+                print(self.get_rect().get_transformed_pos(1,rel.x,rel.y),i)
 
-                if self.get_rect().collides_width_rect(i):
+                if self.get_rect().get_transformed_pos(1,rel.x,rel.y).collides_width_rect(i):
                     return False
 
 
@@ -94,11 +94,11 @@ class Bee:
 
 
     def render(self,screen:pg.surface.Surface,camera:Pos):
-        for i in Bee.on_sim_chunks:
-            rects = i.get_blocking_objects()
-
-            for c in rects:
-                c.render(screen,camera.get_tuple())
+        # for i in Bee.on_sim_chunks:
+        #     rects = i.get_blocking_objects()
+        #
+        #     for c in rects:
+        #         c.render(screen,camera.get_tuple())
 
         sprite = self.msprite
         if self.is_on_fire: sprite = self.fire_msprite

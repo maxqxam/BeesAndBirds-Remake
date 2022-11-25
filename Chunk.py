@@ -181,7 +181,10 @@ class Chunk:
 
         for i in self.body:
             rects.append(
-                i[0].get_rect(Chunk.step_x,Chunk.step_y).transform_pos(Chunk.step_x)
+                i[0].get_transformed_pos(1,self.offset_x,self.offset_y)
+                .get_rect(Chunk.step_x,Chunk.step_y).transform_pos(Chunk.step_x)
+
+
             )
 
         return rects

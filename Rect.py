@@ -34,7 +34,17 @@ class Rect:
 
         return self
 
-    def transform_pos(self,mult:float=1,sum_x:float=0,sum_y:float=0):
+    def get_transformed_pos(self,mult:float=1,sum_x:float=0,sum_y:float=0) -> Rect:
+        mask = Rect(self.x,self.y,self.width,self.height)
+
+        mask.x *= mult
+        mask.y *= mult
+        mask.x += sum_x
+        mask.y += sum_y
+
+        return mask
+
+    def transform_pos(self,mult:float=1,sum_x:float=0,sum_y:float=0) -> Rect:
         self.x*=mult
         self.y*=mult
         self.x+=sum_x
