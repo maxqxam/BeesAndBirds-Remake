@@ -21,6 +21,7 @@ class Chunk:
 
 
         self.top_left = top_left
+
         self.chunk_width = chunk_width
         self.chunk_height = chunk_height
         self.island_width = random.randint(island_width//3,island_width)
@@ -172,6 +173,19 @@ class Chunk:
                          self.chunk_width * Chunk.step_x,
                          1 * Chunk.step_y
                      ])
+
+
+    def get_blocking_objects(self):
+
+        rects = []
+
+        for i in self.body:
+            rects.append(
+                i[0].get_rect(Chunk.step_x,Chunk.step_y).transform_pos(Chunk.step_x)
+            )
+
+        return rects
+        # print(self.body)
 
 
     def render(self,screen:pg.surface.Surface,camera_rel:Pos):

@@ -34,10 +34,11 @@ class Game:
 
     def check_events(self):
 
-        self.world.check_events()
 
         step = 10
         move_rel:Pos = Pos(0,0)
+
+        self.world.player.is_ghost = K_LSHIFT in self.held_keys
 
         if K_RIGHT in self.held_keys:
             self.world.camera_rel.x-=step
@@ -57,9 +58,12 @@ class Game:
 
         if move_rel.x!=0 or move_rel.y!=0:
             self.world.player.is_moving = True
-            self.world.player.move(move_rel)
+            self.world.player.move_request(move_rel)
         else:
             self.world.player.is_moving = False
+
+        self.world.check_events()
+
 
 
     def update_and_render(self):

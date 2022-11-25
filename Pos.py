@@ -1,3 +1,5 @@
+from Rect import Rect
+
 class Pos:
     def __init__(self,x:int,y:int):
         self.x = x
@@ -5,6 +7,13 @@ class Pos:
 
     def __str__(self):
         return "Pos< X:{0} , Y:{1}>".format(self.x,self.y)
+
+
+    def get_rect(self,width:float,height:float) -> Rect :
+        return Rect(self.x,self.y,0,0)\
+            .get_transformed_rect()\
+            .set_size(width,height)
+
     def get_list(self):
         return [self.x,self.y]
 
@@ -27,4 +36,6 @@ class Pos:
     def combine(self,pos):
         self.x += pos.x
         self.y += pos.y
+
+
 

@@ -46,6 +46,7 @@ class World:
         Bee.image = self.image
         Bee.step_x = step_x
         Bee.step_y = step_y
+        Bee.on_sim_chunks = []
 
         self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2),
                           Pos(0,0),1,step_x//5)
@@ -117,8 +118,11 @@ class World:
 
         adjacent_chunks = self.get_adjacent_chunks()
 
+        Bee.on_sim_chunks.clear()
+
         for i in self.chunks:
             if i in adjacent_chunks:
+                Bee.on_sim_chunks.append(self.chunks[i])
                 self.chunks[i].check_events()
 
 
@@ -141,7 +145,7 @@ class World:
 
         self.player.render(screen,self.camera_rel)
 
-        print("rendered chunks : ",c,"total chunks : ",len(self.chunks))
+        # print("rendered chunks : ",c,"total chunks : ",len(self.chunks))
 
 
     def render_debug(self,screen:pg.surface.Surface):
