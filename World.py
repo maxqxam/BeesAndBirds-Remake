@@ -153,6 +153,9 @@ class World:
         x_offset = self.camera_rel.x % self.grid_step_x
         y_offset = self.camera_rel.y % self.grid_step_y
 
+
+
+
         adjacent_chunks = self.get_adjacent_chunks()
         for i in self.chunks:
             if i in adjacent_chunks:
@@ -167,5 +170,10 @@ class World:
                        self.screen_height // self.grid_step_y):
             pg.draw.line(screen,[0,0,0],[0,i*self.grid_step_y + y_offset],
                          [self.screen_width,i*self.grid_step_y + y_offset])
+
+        for i in Bee.on_sim_chunks:
+            rects = i.get_blocking_objects()
+            for c in rects:
+                c.render(screen,self.camera_rel.get_tuple())
 
 

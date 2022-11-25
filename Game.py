@@ -3,7 +3,7 @@ from pygame.locals import *
 
 from World import World
 from Pos import Pos
-
+from Bee import Bee
 class Game:
     def __init__(self,screen:pg.surface.Surface):
         self.screen = screen
@@ -70,7 +70,8 @@ class Game:
 
         self.smask.fill([180,220,255])
 
-        if self.should_render_debug: self.world.render_debug(self.smask)
+        if self.should_render_debug:
+            self.world.render_debug(self.smask)
 
         self.world.render(self.smask)
 
