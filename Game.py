@@ -13,7 +13,7 @@ class Game:
         self.smask = pg.surface.Surface([self.X,self.Y])
         self.world = World(50,50,self.X,self.Y)
         self.held_keys = []
-
+        self.should_render_debug = False
 
 
     def get_events(self):
@@ -27,8 +27,10 @@ class Game:
 
             elif i.type==KEYUP:
                 if i.key in self.held_keys:
-
                     self.held_keys.remove(i.key)
+
+                if i.key==K_F1:
+                    self.should_render_debug = not self.should_render_debug
 
     def check_events(self):
 
@@ -64,7 +66,8 @@ class Game:
 
         self.smask.fill([180,220,255])
 
-        self.world.render_debug(self.smask)
+        if self.should_render_debug: self.world.render_debug(self.smask)
+
         self.world.render(self.smask)
 
         scaled_smask = pg.transform.scale(self.smask,[self.screen.get_width(),
