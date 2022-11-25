@@ -40,21 +40,10 @@ class Game:
 
         self.world.player.is_ghost = K_LSHIFT in self.held_keys
 
-        if K_RIGHT in self.held_keys:
-            self.world.camera_rel.x-=step
-            move_rel.x = step
-
-        elif K_LEFT in self.held_keys:
-            self.world.camera_rel.x+=step
-            move_rel.x = -step
-
-        if K_UP in self.held_keys:
-            self.world.camera_rel.y+=step
-            move_rel.y = -step
-
-        elif K_DOWN in self.held_keys:
-            self.world.camera_rel.y-=step
-            move_rel.y = step
+        if K_RIGHT in self.held_keys:move_rel.x = step
+        elif K_LEFT in self.held_keys:move_rel.x = -step
+        if K_UP in self.held_keys:move_rel.y = -step
+        elif K_DOWN in self.held_keys:move_rel.y = step
 
         if move_rel.x!=0 or move_rel.y!=0:
             self.world.player.is_moving = True
@@ -62,7 +51,10 @@ class Game:
         else:
             self.world.player.is_moving = False
 
+
         self.world.check_events()
+        if self.world.player.if_moved:
+            self.world.camera_rel.combine(move_rel.get_transformed_pos(-1))
 
 
 

@@ -53,6 +53,8 @@ class World:
         self.camera_rel.x -= self.player.width // 2
         self.camera_rel.y -= self.player.width // 2
 
+
+
     def get_current_chunk(self):
         x,y = self.camera_rel.get_list()
         x = -x + self.screen_width//2
@@ -154,8 +156,6 @@ class World:
         y_offset = self.camera_rel.y % self.grid_step_y
 
 
-
-
         adjacent_chunks = self.get_adjacent_chunks()
         for i in self.chunks:
             if i in adjacent_chunks:
@@ -176,4 +176,4 @@ class World:
             for c in rects:
                 c.render(screen,self.camera_rel.get_tuple())
 
-
+        self.player.render_debug(screen,self.camera_rel)

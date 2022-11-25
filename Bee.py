@@ -25,6 +25,7 @@ class Bee:
         self.is_on_fire = False
         self.is_flipped = False
         self.is_moving = False
+        self.if_moved = False
         self.msprite = MSprite(Bee.image.bee_list,tick_speed_list=[0.15])
         self.fire_msprite = MSprite(Bee.image.bee_fire_list,tick_speed_list=[0.15])
         self.is_ghost = True
@@ -77,7 +78,7 @@ class Bee:
     def check_events(self):
 
         if len(self.move_request_list)!=0:
-            self.move(self.move_request_list[0])
+            self.if_moved = self.move(self.move_request_list[0])
             self.move_request_list.pop(0)
 
 
@@ -92,10 +93,10 @@ class Bee:
 
         if self.is_moving: sprite.check_events()
 
+    def render_debug(self,screen:pg.surface.Surface,camera:Pos):
+        self.get_rect().render(screen,camera.get_tuple())
 
     def render(self,screen:pg.surface.Surface,camera:Pos):
-
-
         sprite = self.msprite
         if self.is_on_fire: sprite = self.fire_msprite
 
