@@ -37,12 +37,35 @@ class Bee:
 
     def update_size_scale(self,new_size_scale:float):
         self.size_scale = new_size_scale
+        old_width,old_height = self.width,self.height
+
         self.update_sprite()
 
+        x_diff = abs(self.width - old_width)
+        y_diff = abs(self.height - old_height)
+
+        print(self.move(Pos(100,100)))
+
+
     def transform_size_scale(self,mult:float=1,plus:float=0):
+
+        old_size_scale = self.size_scale
         self.size_scale *= mult
         self.size_scale += plus
+        old_width, old_height = self.width, self.height
         self.update_sprite()
+        x_diff = abs(self.width - old_width)
+        y_diff = abs(self.height - old_height)
+
+        transform_result:bool = True
+        if old_size_scale > self.size_scale:
+            transform_result = self.move(Pos(x_diff/2, y_diff/2),False)
+        else:
+            transform_result = self.move(Pos(-x_diff/2, -y_diff/2),False)
+
+        if not transform_result:
+            self.size_scale = old_size_scale
+            self.update_sprite()
 
     def update_sprite(self):
 
@@ -51,13 +74,11 @@ class Bee:
             i.do_flips()
             self.width,self.height = i.width,i.height
 
-
-
     def move_request(self,rel:Pos):
         self.move_request_list.append(rel)
 
 
-    def move(self,rel:Pos) -> bool:
+    def move(self,rel:Pos , should_do_flip:bool = True) -> bool:
 
         for i in Bee.on_sim_chunks:
             if self.is_ghost:
@@ -74,8 +95,9 @@ class Bee:
         self.top_left_pos_rel.combine(rel)
         print(self.top_left_pos,self.top_left_pos_rel)
 
-        if rel.x > 0: self.is_flipped = False
-        if rel.x < 0: self.is_flipped = True
+        if should_do_flip:
+            if rel.x > 0: self.is_flipped = False
+            if rel.x < 0: self.is_flipped = True
 
         if self.top_left_pos_rel.x >= Bee.step_x:
             self.top_left_pos.x += 1
