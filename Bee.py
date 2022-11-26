@@ -57,7 +57,6 @@ class Bee:
         x_diff = abs(self.width - old_width)
         y_diff = abs(self.height - old_height)
 
-        transform_result:bool = True
         if old_size_scale > self.size_scale:
             transform_result = self.move(Pos(x_diff/2, y_diff/2),False)
         else:
@@ -78,7 +77,13 @@ class Bee:
         self.move_request_list.append(rel)
 
 
-    def move(self,rel:Pos , should_do_flip:bool = True) -> bool:
+    def move(self,rel:Pos ,
+             should_do_flip:bool = True,
+             first_rel:Pos=None) -> bool:
+
+        if first_rel is None: first_rel = Pos(rel.x,rel.y)
+        limit = first_rel.get_transformed_pos(0.01)
+        if abs(rel.x) < abs(limit.x) or abs(rel.y) < abs(limit.y): return False
 
         for i in Bee.on_sim_chunks:
             if self.is_ghost:
@@ -89,7 +94,7 @@ class Bee:
                 print(self.get_rect().get_transformed_pos(1,rel.x,rel.y),i)
 
                 if self.get_rect().get_transformed_pos(1,rel.x,rel.y).collides_width_rect(i):
-                    return False
+                    return self.move(rel.get_transformed_pos(0.9),should_do_flip,first_rel)
 
 
         self.top_left_pos_rel.combine(rel)
