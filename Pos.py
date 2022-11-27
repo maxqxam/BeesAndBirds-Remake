@@ -40,5 +40,10 @@ class Pos:
     def get_diff(self,pos):
         return Pos(self.x - pos.x,self.y - pos.y)
 
+    def clear(self):
+        self.x = 0
+        self.y = 0
+
+
 
 

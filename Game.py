@@ -60,7 +60,7 @@ class Game:
         last_player_pos = self.world.player.get_pos()
         self.world.check_events()
         if self.world.player.if_moved:
-            self.world.camera_rel.combine(last_player_pos.get_diff(self.world.player.get_pos()))
+            self.world.camera_on_hold_move.combine(last_player_pos.get_diff(self.world.player.get_pos()))
 
 
 

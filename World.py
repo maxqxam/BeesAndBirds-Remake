@@ -54,6 +54,9 @@ class World:
         self.camera_rel.x -= self.player.width // 2
         self.camera_rel.y -= self.player.width // 2
 
+        self.camera_limit = Pos(step_x*0.01,step_y*0.01)
+        self.camera_on_hold_move = Pos(0,0)
+        self.camera_move_speed_scale = 0.05
 
 
     def get_current_chunk(self):
@@ -113,6 +116,22 @@ class World:
         self.generate_chunk(top_left_rel.get_transformed_pos(1, -1, -1))
         self.generate_chunk(top_left_rel.get_transformed_pos(1, -1, +1))
 
+
+    def move_camera(self) -> bool:
+        if abs(self.camera_on_hold_move.x) < abs(self.camera_limit.x) and \
+                abs(self.camera_on_hold_move.y) < abs(self.camera_limit.y):
+
+            self.camera_rel.transform(1,self.camera_on_hold_move.x,self.camera_on_hold_move.y)
+            self.camera_on_hold_move.clear()
+
+            return False
+
+
+        mslice = self.camera_on_hold_move.get_transformed_pos(self.camera_move_speed_scale)
+        self.camera_rel.transform(1, mslice.x, mslice.y)
+        self.camera_on_hold_move.transform(1,-mslice.x,-mslice.y)
+
+
     def check_events(self):
         new_chunk = self.get_current_chunk()
 
@@ -132,7 +151,7 @@ class World:
         self.last_chunk = new_chunk
 
         self.player.check_events()
-
+        self.move_camera()
 
 
 
@@ -148,7 +167,7 @@ class World:
 
         self.player.render(screen,self.camera_rel)
 
-        # print("rendered chunks : ",c,"total chunks : ",len(self.chunks))
+
 
 
     def render_debug(self,screen:pg.surface.Surface):

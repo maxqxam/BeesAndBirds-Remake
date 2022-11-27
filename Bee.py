@@ -94,8 +94,6 @@ class Bee:
 
             rects = i.get_blocking_objects()
             for i in rects:
-                print(self.get_rect().get_transformed_pos(1,rel.x,rel.y),i)
-
                 if self.get_rect().get_transformed_pos(1,rel.x,rel.y).collides_width_rect(i):
                     return should_do_recursive and \
                            self.move(rel.get_transformed_pos(0.9),should_do_flip,first_rel)
