@@ -48,7 +48,7 @@ class World:
         Bee.step_y = step_y
         Bee.on_sim_chunks = []
 
-        self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2),
+        self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2 + 0.5),
                           Pos(0,0),1,step_x//5)
 
         self.camera_rel.x -= self.player.width // 2

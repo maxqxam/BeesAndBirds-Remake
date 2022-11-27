@@ -37,5 +37,8 @@ class Pos:
         self.x += pos.x
         self.y += pos.y
 
+    def get_diff(self,pos):
+        return Pos(self.x - pos.x,self.y - pos.y)
+
 
 

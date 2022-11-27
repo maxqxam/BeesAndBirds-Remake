@@ -39,11 +39,11 @@ class Game:
 
         self.world.player.is_ghost = K_LSHIFT in self.held_keys
 
-        if K_1 in self.held_keys and self.world.player.size_scale > 0.1:
-            self.world.player.transform_size_scale(plus=-0.01)
+        if K_1 in self.held_keys and self.world.player.size_scale > 0.11:
+            self.world.player.transform_size_scale(plus=-0.1)
 
-        if K_2 in self.held_keys and self.world.player.size_scale < 5:
-            self.world.player.transform_size_scale(plus=0.01)
+        if K_2 in self.held_keys and self.world.player.size_scale < 10:
+            self.world.player.transform_size_scale(plus=0.1)
 
 
         if K_RIGHT in self.held_keys:move_rel.x = step
@@ -57,10 +57,10 @@ class Game:
         else:
             self.world.player.is_moving = False
 
-
+        last_player_pos = self.world.player.get_pos()
         self.world.check_events()
         if self.world.player.if_moved:
-            self.world.camera_rel.combine(move_rel.get_transformed_pos(-1))
+            self.world.camera_rel.combine(last_player_pos.get_diff(self.world.player.get_pos()))
 
 
 
@@ -70,6 +70,8 @@ class Game:
 
         if self.should_render_debug:
             self.world.render_debug(self.smask)
+            pg.draw.line(self.smask,[255,100,100],[self.X/2,0],[self.X/2,self.Y])
+            pg.draw.line(self.smask, [255, 100, 100], [0, self.Y/2], [self.X , self.Y/2])
 
         self.world.render(self.smask)
 

@@ -58,9 +58,11 @@ class Bee:
         y_diff = abs(self.height - old_height)
 
         if old_size_scale > self.size_scale:
-            transform_result = self.move(Pos(x_diff/2, y_diff/2),False)
+            transform_result = self.move(Pos(x_diff/2, y_diff/2),should_do_flip=False
+                                         ,should_do_recursive=False)
         else:
-            transform_result = self.move(Pos(-x_diff/2, -y_diff/2),False)
+            transform_result = self.move(Pos(-x_diff/2, -y_diff/2),should_do_flip=False
+                                         ,should_do_recursive=False)
 
         if not transform_result:
             self.size_scale = old_size_scale
@@ -79,7 +81,8 @@ class Bee:
 
     def move(self,rel:Pos ,
              should_do_flip:bool = True,
-             first_rel:Pos=None) -> bool:
+             first_rel:Pos = None,
+             should_do_recursive:bool = True) -> bool:
 
         if first_rel is None: first_rel = Pos(rel.x,rel.y)
         limit = first_rel.get_transformed_pos(0.01)
@@ -94,7 +97,9 @@ class Bee:
                 print(self.get_rect().get_transformed_pos(1,rel.x,rel.y),i)
 
                 if self.get_rect().get_transformed_pos(1,rel.x,rel.y).collides_width_rect(i):
-                    return self.move(rel.get_transformed_pos(0.9),should_do_flip,first_rel)
+                    return should_do_recursive and \
+                           self.move(rel.get_transformed_pos(0.9),should_do_flip,first_rel)
+
 
 
         self.top_left_pos_rel.combine(rel)
@@ -152,7 +157,10 @@ class Bee:
                          , self.top_left_pos_rel.x + camera.x,
                           self.top_left_pos_rel.y + camera.y))
 
-
+    def get_pos(self):
+        return self.top_left_pos.get_transformed_pos(Bee.step_x
+                                                     , self.top_left_pos_rel.x,
+                                                     self.top_left_pos_rel.y)
     def get_rect(self) -> Rect:
         return self.top_left_pos.get_transformed_pos(Bee.step_x
                                               , self.top_left_pos_rel.x ,
