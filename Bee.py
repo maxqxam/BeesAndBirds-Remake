@@ -33,6 +33,7 @@ class Bee:
         self.fire_msprite = MSprite(Bee.image.bee_fire_list,tick_speed_list=[0.15])
         self.is_ghost = True
         self.move_request_list:list[Pos] = []
+        self.world_move_request_list:list[Pos] = []
 
 
     def update_size_scale(self,new_size_scale:float):
@@ -78,6 +79,8 @@ class Bee:
     def move_request(self,rel:Pos):
         self.move_request_list.append(rel)
 
+    def world_move_request(self,rel:Pos):
+        self.world_move_request_list.append(rel)
 
     def move(self,rel:Pos ,
              should_do_flip:bool = True,
@@ -130,6 +133,15 @@ class Bee:
         if len(self.move_request_list)!=0:
             self.if_moved = self.move(self.move_request_list[0])
             self.move_request_list.pop(0)
+
+        if len(self.world_move_request_list)!=0:
+
+            x = self.move(self.world_move_request_list[0]
+                                        ,should_do_flip=False)
+            if not self.if_moved:
+                self.if_moved = x
+
+            self.world_move_request_list.pop(0)
 
 
         if self.is_flipped ^ self.msprite.x_flipped:

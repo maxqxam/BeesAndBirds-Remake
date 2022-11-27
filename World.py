@@ -48,6 +48,8 @@ class World:
         Bee.step_y = step_y
         Bee.on_sim_chunks = []
 
+        self.gravity_speed = Bee.step_x * 0.05
+
         self.player = Bee(Pos(self.chunk_width//2,self.chunk_height//2 + 0.5),
                           Pos(0,0),1,step_x//5)
 
@@ -56,7 +58,7 @@ class World:
 
         self.camera_limit = Pos(step_x*0.01,step_y*0.01)
         self.camera_on_hold_move = Pos(0,0)
-        self.camera_move_speed_scale = 0.05
+        self.camera_move_speed_scale = 0.08
 
 
     def get_current_chunk(self):
@@ -149,6 +151,8 @@ class World:
 
 
         self.last_chunk = new_chunk
+
+        self.player.world_move_request(Pos(0, self.gravity_speed))
 
         self.player.check_events()
         self.move_camera()
