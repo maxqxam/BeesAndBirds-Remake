@@ -25,6 +25,7 @@ class Bee:
         self.height = 0
         self.update_sprite()
         self.speed = speed
+        self.animation_speed = 0.08
         self.water_speed_scale = 0.5
         self.is_on_fire = False
         self.is_flipped = False
@@ -146,6 +147,10 @@ class Bee:
         return True
 
     def check_events(self):
+
+        self.fire_msprite.tick_speed = self.size_scale * self.animation_speed
+        self.msprite.tick_speed = self.size_scale * self.animation_speed
+
 
         if len(self.move_request_list)!=0:
             self.if_moved = self.move(self.move_request_list[0])
