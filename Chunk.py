@@ -12,6 +12,14 @@ class Chunk:
     step_x:int
     step_y:int
 
+    WATER = 0
+    FIRE = 1
+    STONE = 2
+    DIRT = 3
+    FLOWER = 4
+
+    BLOCKING_OBJECTS = [STONE , DIRT, FLOWER]
+
     def __init__(self,
                  top_left:Pos,
                  chunk_width:int,
@@ -54,33 +62,37 @@ class Chunk:
 
     def make_stone_pool(self,top_left:Pos,island_width:int,island_height:int):
 
+        Id = 0
         for i in range(island_width):
             for c in range(1,island_height):
                 sprite = MSprite(Chunk.image.water_list,
                                  True,
                                  [5,4])
-
+                Id = Chunk.WATER
                 if i==0 or i==island_width-1 or c==island_height-1:
+                    Id = Chunk.STONE
                     sprite = random.choice(Chunk.image.stone_list)
                     if c==1:
                         sprite = random.choice(Chunk.image.top_stone_list)
 
-                self.body.append((top_left.get_transformed_pos(1,i,c),sprite))
+                self.body.append((top_left.get_transformed_pos(1,i,c),sprite,Id))
 
         for i in [0,island_width-1]:
             egg = get_egg(4,1)
             if egg:
                 sprite = MSprite(Chunk.image.fire_list,tick_speed_list=[0.2])
-                self.body.append((top_left.get_transformed_pos(1,i,0),sprite))
+                self.body.append((top_left.get_transformed_pos(1,i,0),sprite,Chunk.FIRE))
 
 
 
 
     def make_dirt_chunk(self,top_left:Pos,island_width:int,island_height:int):
 
+        Id = 0
         for i in range(island_width):
             for c in range(1,island_height):
                 sprite = random.choice(Chunk.image.dirt_list)
+                Id = Chunk.DIRT
                 if c==1:
                     sprite = random.choice(Chunk.image.top_dirt_list)
                     egg = 1
@@ -91,7 +103,7 @@ class Chunk:
                     sprite = random.choice(Chunk.image.bottom_dirt_list)
 
 
-                self.body.append((top_left.get_transformed_pos(1,i,c),sprite))
+                self.body.append((top_left.get_transformed_pos(1,i,c),sprite,Id))
                 if egg == 0: break
 
         for i in range(island_width):
@@ -99,7 +111,7 @@ class Chunk:
             if egg:
                 sprite = random.choice(Chunk.image.flower_list)
 
-                self.body.append((top_left.get_transformed_pos(1, i, 0), sprite))
+                self.body.append((top_left.get_transformed_pos(1, i, 0), sprite,Chunk.FLOWER))
 
 
     def check_events(self):
@@ -180,12 +192,13 @@ class Chunk:
         rects = []
 
         for i in self.body:
-            rects.append(
-                i[0].get_transformed_pos(1,self.offset_x,self.offset_y)
-                .get_rect(Chunk.step_x,Chunk.step_y).transform_pos(Chunk.step_x)
+            if i[2] in Chunk.BLOCKING_OBJECTS:
+                rects.append(
+                    i[0].get_transformed_pos(1,self.offset_x,self.offset_y)
+                    .get_rect(Chunk.step_x,Chunk.step_y).transform_pos(Chunk.step_x)
 
 
-            )
+                )
 
         return rects
         # print(self.body)

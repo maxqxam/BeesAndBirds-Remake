@@ -45,7 +45,7 @@ class Bee:
         x_diff = abs(self.width - old_width)
         y_diff = abs(self.height - old_height)
 
-        print(self.move(Pos(100,100)))
+
 
 
     def transform_size_scale(self,mult:float=1,plus:float=0):
@@ -104,7 +104,7 @@ class Bee:
 
 
         self.top_left_pos_rel.combine(rel)
-        print(self.top_left_pos,self.top_left_pos_rel)
+        # print(self.top_left_pos,self.top_left_pos_rel)
 
         if should_do_flip:
             if rel.x > 0: self.is_flipped = False
