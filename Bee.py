@@ -25,6 +25,7 @@ class Bee:
         self.height = 0
         self.update_sprite()
         self.speed = speed
+        self.water_speed_scale = 0.5
         self.is_on_fire = False
         self.is_flipped = False
         self.is_moving = False
@@ -34,6 +35,7 @@ class Bee:
         self.is_ghost = True
         self.move_request_list:list[Pos] = []
         self.world_move_request_list:list[Pos] = []
+
 
 
     def update_size_scale(self,new_size_scale:float):
@@ -60,10 +62,12 @@ class Bee:
 
         if old_size_scale > self.size_scale:
             transform_result = self.move(Pos(x_diff/2, y_diff/2),should_do_flip=False
-                                         ,should_do_recursive=False)
+                                         ,should_do_recursive=False,
+                                         should_get_slowed=False)
         else:
             transform_result = self.move(Pos(-x_diff/2, -y_diff/2),should_do_flip=False
-                                         ,should_do_recursive=False)
+                                         ,should_do_recursive=False,
+                                         should_get_slowed=False)
 
         if not transform_result:
             self.size_scale = old_size_scale
@@ -85,26 +89,39 @@ class Bee:
     def move(self,rel:Pos ,
              should_do_flip:bool = True,
              first_rel:Pos = None,
-             should_do_recursive:bool = True) -> bool:
+             should_do_recursive:bool = True,
+             should_get_slowed:bool = True) -> bool:
 
         if first_rel is None: first_rel = Pos(rel.x,rel.y)
         limit = first_rel.get_transformed_pos(0.01)
         if abs(rel.x) < abs(limit.x) or abs(rel.y) < abs(limit.y): return False
 
-        for i in Bee.on_sim_chunks:
+        is_slowed:bool = False
+        slowed_rel = rel.get_transformed_pos(self.water_speed_scale)
+
+        for c in Bee.on_sim_chunks:
             if self.is_ghost:
                 break
 
-            rects = i.get_blocking_objects()
-            for i in rects:
+            slowing_rects = c.get_slowing_objects()
+
+            for i in slowing_rects:
+                if self.get_rect().get_transformed_pos(
+                        1,slowed_rel.x,slowed_rel.y).collides_width_rect(i):
+                    is_slowed = True
+
+            blocking_rects = c.get_blocking_objects()
+            for i in blocking_rects:
                 if self.get_rect().get_transformed_pos(1,rel.x,rel.y).collides_width_rect(i):
                     return should_do_recursive and \
                            self.move(rel.get_transformed_pos(0.9),should_do_flip,first_rel)
 
 
+        if is_slowed and should_get_slowed:
+            self.top_left_pos_rel.combine(slowed_rel)
+        else:
+            self.top_left_pos_rel.combine(rel)
 
-        self.top_left_pos_rel.combine(rel)
-        # print(self.top_left_pos,self.top_left_pos_rel)
 
         if should_do_flip:
             if rel.x > 0: self.is_flipped = False
